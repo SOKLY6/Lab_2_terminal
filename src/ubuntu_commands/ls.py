@@ -9,6 +9,14 @@ correct_flags = {'l', 'a'}
 
 
 def ls_long(item_path: Path) -> str:
+    """Форматирует информацию о файле для подробного вывода ls.
+    
+    Args:
+        item_path: Путь к файлу/директории
+    
+    Returns:
+        str: Отформатированная строка с правами, размером, датой и именем
+    """
     stat_info = item_path.stat()
 
     permissions = stat.filemode(stat_info.st_mode)
@@ -25,6 +33,15 @@ def ls_long(item_path: Path) -> str:
 
 
 def ls(arguments: list[str], flags: set[typing.Any] | None = None) -> int:
+    """Выводит список файлов и директорий.
+    
+    Args:
+        arguments: Пути для отображения (по умолчанию текущая директория)
+        flags: 'l' - подробный формат, 'a' - показывать скрытые файлы
+    
+    Returns:
+        int: 0 при успехе, 1 при ошибке
+    """
     if flags is None:
         flags = set()
 

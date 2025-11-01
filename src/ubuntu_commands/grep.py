@@ -8,6 +8,15 @@ correct_flags = {'r', 'i'}
 
 
 def grep(arguments: list[str], flags: set[typing.Any] | None = None) -> int:
+    """Ищет текст в файлах по регулярному выражению.
+    
+    Args:
+        arguments: Паттерн для поиска и пути к файлам
+        flags: 'r' - рекурсивный поиск, 'i' - игнорировать регистр
+    
+    Returns:
+        int: 0 при успехе, 1 при ошибке
+    """
     if flags is None:
         flags = set()
 

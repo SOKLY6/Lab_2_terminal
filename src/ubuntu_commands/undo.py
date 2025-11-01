@@ -7,6 +7,15 @@ from logger.logger_setup import terminal_logger
 
 
 def undo(arguments: list[str], flags: set[typing.Any] | None = None) -> int:
+    """Отменяет последнюю команду (cp, mv, rm).
+    
+    Args:
+        arguments: Не используются
+        flags: Флаги (не поддерживаются)
+    
+    Returns:
+        int: 0 при успехе, 1 при ошибке
+    """
     if not FOR_UNDO_HISTORY:
         print('undo: no commands to undo')
         terminal_logger.error('undo: no commands to undo')

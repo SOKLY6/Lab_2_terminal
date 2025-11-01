@@ -7,6 +7,14 @@ from ubuntu_commands import helper_functions
 
 
 def is_tar_gz_archive(file_path: Path) -> bool:
+    """Проверяет, является ли файл tar.gz архивом.
+    
+    Args:
+        file_path: Путь к файлу для проверки
+    
+    Returns:
+        bool: True если файл является tar.gz архивом
+    """
     path = Path(file_path)
     suffixes = path.suffixes
     return (
@@ -19,6 +27,15 @@ def is_tar_gz_archive(file_path: Path) -> bool:
 
 
 def untar(arguments: list[str], flags: set[typing.Any] | None = None) -> int:
+    """Распаковывает tar-архивы.
+    
+    Args:
+        arguments: Пути к архивам и директория для распаковки (опционально)
+        flags: Флаги (не поддерживаются)
+    
+    Returns:
+        int: 0 при успехе, 1 при ошибке
+    """
     if not flags:
         if not arguments:
             print('untar: missing archive operand')

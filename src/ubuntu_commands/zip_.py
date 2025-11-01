@@ -6,6 +6,15 @@ from ubuntu_commands import helper_functions
 
 
 def zip_(arguments: list[str], flags: set[typing.Any] | None = None) -> int:
+    """Создает zip-архив из файлов и директорий.
+    
+    Args:
+        arguments: Имя архива и пути к архивируемым файлам
+        flags: Флаги (не поддерживаются)
+    
+    Returns:
+        int: 0 при успехе, 1 при ошибке
+    """
     if not flags:
         if len(arguments) == 0:
             print('zip: missing arguments')

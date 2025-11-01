@@ -10,6 +10,15 @@ from constants import (
 
 
 def is_flags(flags: str) -> int | set:
+    """Проверяет и преобразует флаги командной строки.
+    
+    Args:
+        flags: Строка с флагами (--long или -short)
+    
+    Returns:
+        set: Множество флагов при успехе
+        int: 1 при ошибке, 0 если не флаги
+    """
     if flags.startswith('-') and not flags.startswith('--'):
         set_of_flags = set(flags[1:])
 
@@ -31,6 +40,14 @@ def is_flags(flags: str) -> int | set:
 
 
 def is_valid_filename(filename: str) -> bool:
+    """Проверяет валидность имени файла.
+    
+    Args:
+        filename: Имя файла для проверки
+    
+    Returns:
+        bool: True если имя валидно
+    """
     if len(filename) > 255:
         return False
 
@@ -47,6 +64,14 @@ def is_valid_filename(filename: str) -> bool:
 
 
 def is_valid_dirname(dirname: str) -> bool:
+    """Проверяет валидность имени директории.
+    
+    Args:
+        dirname: Имя директории для проверки
+    
+    Returns:
+        bool: True если имя валидно
+    """
     if len(dirname) > 255:
         return False
 
@@ -65,6 +90,16 @@ def is_valid_dirname(dirname: str) -> bool:
 def extracting_files(
     temp_dir_path: Path, extract_folder_path: Path, archive_name: str
 ) -> int:
+    """Извлекает файлы из временной директории с обработкой конфликтов.
+    
+    Args:
+        temp_dir_path: Путь к временной директории
+        extract_folder_path: Путь для извлечения
+        archive_name: Имя архива
+    
+    Returns:
+        int: 0 при успехе
+    """
     print(f'Archive:  {archive_name}')
 
     all_files = list(temp_dir_path.rglob('*'))
@@ -129,6 +164,14 @@ def extracting_files(
 
 
 def write_history(line: str) -> int:
+    """Записывает команду в файл истории.
+    
+    Args:
+        line: Команда для записи
+    
+    Returns:
+        int: 0 при успехе
+    """
     if HISTORY_PATH.stat().st_size == 0:
         with open(HISTORY_PATH, 'w') as f:
             f.write(f'1. {line}\n')

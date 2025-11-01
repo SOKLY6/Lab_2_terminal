@@ -9,6 +9,15 @@ correct_flags = {'r'}
 
 
 def rm(arguments: list[str], flags: set[typing.Any] | None = None) -> int:
+    """Удаляет файлы и директории.
+    
+    Args:
+        arguments: Пути к удаляемым файлам и директориям
+        flags: 'r' - рекурсивное удаление директорий
+    
+    Returns:
+        int: 0 при успехе, 1 при ошибке
+    """
     if flags is None:
         flags = set()
 
