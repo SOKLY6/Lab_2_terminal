@@ -1,7 +1,7 @@
 import pytest
 import tempfile
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 import sys
 import shutil
 
@@ -93,7 +93,8 @@ def test_rm_directory_without_r_flag(mock_temp_directory, capsys):
 
 def test_rm_directory_with_r_flag(mock_temp_directory, mock_trash_path, capsys):
     """rm успешно удаляет директорию с флагом -r"""
-    with patch('src.ubuntu_commands.rm.FOR_UNDO_HISTORY', []) as mock_history:
+    with patch('src.ubuntu_commands.rm.FOR_UNDO_HISTORY', []) as mock_history, \
+         patch('builtins.input', return_value='y'):
         result = rm.rm([mock_temp_directory], {'r'})
         
         captured = capsys.readouterr()
@@ -104,6 +105,22 @@ def test_rm_directory_with_r_flag(mock_temp_directory, mock_trash_path, capsys):
         assert len(trash_items) == 1
         assert captured.out == ""
         assert len(mock_history) == 1
+
+
+def test_rm_directory_with_r_flag_declined(mock_temp_directory, mock_trash_path, capsys):
+    """rm пропускает директорию при отказе пользователя"""
+    with patch('src.ubuntu_commands.rm.FOR_UNDO_HISTORY', []) as mock_history, \
+         patch('builtins.input', return_value='n'):
+        result = rm.rm([mock_temp_directory], {'r'})
+        
+        captured = capsys.readouterr()
+        
+        assert result == 0
+        assert Path(mock_temp_directory).exists()
+        trash_items = list(Path(mock_trash_path).iterdir())
+        assert len(trash_items) == 0
+        assert "rm: skipping directory" in captured.out
+        assert len(mock_history) == 0 
 
 
 def test_rm_multiple_files(mock_temp_files, mock_trash_path, capsys):
@@ -128,7 +145,8 @@ def test_rm_mixed_files_and_dirs(mock_temp_files, mock_temp_directory, mock_tras
     """rm обрабатывает mix файлов и директорий"""
     temp_path1, _ = mock_temp_files
     
-    with patch('src.ubuntu_commands.rm.FOR_UNDO_HISTORY', []) as mock_history:
+    with patch('src.ubuntu_commands.rm.FOR_UNDO_HISTORY', []) as mock_history, \
+         patch('builtins.input', return_value='y'):
         result = rm.rm([temp_path1, mock_temp_directory], {'r'})
         
         captured = capsys.readouterr()
@@ -158,7 +176,8 @@ def test_rm_file_remove_error(mock_temp_files, capsys):
 
 def test_rm_directory_remove_error(mock_temp_directory, capsys):
     """rm показывает ошибку при сбое удаления директории"""
-    with patch('shutil.copytree', side_effect=Exception("Permission denied")):
+    with patch('builtins.input', return_value='y'), \
+         patch('shutil.copytree', side_effect=Exception("Permission denied")):
         result = rm.rm([mock_temp_directory], {'r'})
         
         captured = capsys.readouterr()
@@ -218,7 +237,8 @@ def test_rm_directory_with_contents(mock_temp_directory, mock_trash_path, capsys
     inner_file = temp_path / "inner_file.txt"
     inner_file.write_text("inner content")
     
-    with patch('src.ubuntu_commands.rm.FOR_UNDO_HISTORY', []) as mock_history:
+    with patch('src.ubuntu_commands.rm.FOR_UNDO_HISTORY', []) as mock_history, \
+         patch('builtins.input', return_value='y'):
         result = rm.rm([mock_temp_directory], {'r'})
         
         captured = capsys.readouterr()
@@ -238,7 +258,8 @@ def test_rm_trash_conflict_resolution(mock_temp_directory, mock_trash_path, caps
     conflict_path = Path(mock_trash_path) / temp_path.name
     conflict_path.mkdir()
     
-    with patch('src.ubuntu_commands.rm.FOR_UNDO_HISTORY', []) as mock_history:
+    with patch('src.ubuntu_commands.rm.FOR_UNDO_HISTORY', []) as mock_history, \
+         patch('builtins.input', return_value='y'):
         result = rm.rm([mock_temp_directory], {'r'})
         
         captured = capsys.readouterr()
@@ -268,7 +289,8 @@ def test_rm_nonexistent_item_type(mock_temp_files, capsys):
 
 def test_rm_empty_directory(mock_temp_directory, mock_trash_path, capsys):
     """rm удаляет пустую директорию с флагом -r"""
-    with patch('src.ubuntu_commands.rm.FOR_UNDO_HISTORY', []) as mock_history:
+    with patch('src.ubuntu_commands.rm.FOR_UNDO_HISTORY', []) as mock_history, \
+         patch('builtins.input', return_value='y'):
         result = rm.rm([mock_temp_directory], {'r'})
         
         captured = capsys.readouterr()
@@ -298,6 +320,23 @@ def test_rm_single_file_in_directory(mock_temp_directory, mock_trash_path, capsy
         assert len(trash_files) == 1
         assert captured.out == ""
         assert len(mock_history) == 1
+
+
+def test_rm_forbidden_paths_root(mock_trash_path, capsys):
+    """rm запрещает удаление корневой директории"""
+    with patch('pathlib.Path.resolve', return_value=Path('/')), \
+         patch('pathlib.Path.exists', return_value=True), \
+         patch('pathlib.Path.is_dir', return_value=True), \
+         patch('builtins.input', return_value='y'):
+        result = rm.rm(['/'], {'r'})
+        
+        captured = capsys.readouterr()
+        
+        assert result == 0
+        assert any(msg in captured.out for msg in [
+            "Permission denied - root directory",
+            "Permission denied - parent directory"
+        ])
 
 
 if __name__ == '__main__':

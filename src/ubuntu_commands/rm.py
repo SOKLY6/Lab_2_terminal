@@ -61,6 +61,40 @@ def rm(arguments: list[str], flags: set[typing.Any] | None = None) -> int:
                 )
                 continue
 
+            forbidden_path = argument_path.resolve()
+            current_dir = Path('.').resolve()
+
+            if forbidden_path == forbidden_path.root:
+                print(
+                    f"rm: cannot remove '{argument}':",
+                    ' Permission denied - root directory',
+                )
+                terminal_logger.error(
+                    f"rm: attempt to remove root directory '{argument}'"
+                )
+                continue
+
+            if forbidden_path == current_dir.parent:
+                print(
+                    f"rm: cannot remove '{argument}':",
+                    ' Permission denied - parent directory',
+                )
+                terminal_logger.error(
+                    f"rm: attempt to remove parent directory '{argument}'"
+                )
+                continue
+
+            answer = (
+                input(f"rm: remove directory '{argument}'? [y/n] ")
+                .strip()
+                .lower()
+            )
+
+            if answer not in ('y', 'yes'):
+                print(f"rm: skipping directory '{argument}'")
+                terminal_logger.info(f"rm: skipping directory '{argument}'")
+                continue
+
             try:
                 trash_argument_path = TRASH_PATH / argument_path.name
 
