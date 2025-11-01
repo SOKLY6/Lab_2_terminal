@@ -3,6 +3,7 @@ repos:
     rev: v1.18.2
     hooks:
       - id: mypy
+        exclude: ^test?/
         args: [--show-error-codes, --pretty]
         additional_dependencies:
           - types-requests
@@ -12,6 +13,7 @@ repos:
     rev: v0.13.2
     hooks:
       - id: ruff-check
+        exclude: ^tests?/
         args: [--fix]
       - id: ruff-format
 

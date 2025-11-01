@@ -34,8 +34,8 @@ def ls(arguments: list[str], flags: set[typing.Any] | None = None) -> int:
             f' {", ".join(flags.difference(correct_flags))}',
         )
         terminal_logger.error(
-            'ls: does not support the flags:',
-            f' {", ".join(flags.difference(correct_flags))}',
+            'ls: does not support the flags:'
+            + f' {", ".join(flags.difference(correct_flags))}',
         )
         return 1
 

@@ -3,12 +3,18 @@ requires-python = ">=3.12"
 dev = [
     "mypy>=1.18.2",
     "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
     "ruff>=0.14.2",
 ]
 
 [tool.ruff]
 line-length = 79
 target-version = 'py312'
+exclude = [
+    "test?/",
+    "**/test_*.py",
+    "**/*_test.py"
+]
 
 [tool.ruff.lint]
 fixable = ['ALL']
@@ -28,7 +34,20 @@ python_version = '3.12'
 disallow_untyped_defs = true
 ignore_missing_imports = true
 strict_optional = true
+exclude = '^test?/'
 
 [tool.pytest.ini_options]
 testpaths = ['tests']
 pythonpath = ['src/']
+
+[tool.coverage.run]
+omit = [
+    "*/test/*",
+    "*/test_*.py",
+    "*/__init__.py",
+    "*/src/constants.py",
+    "src/main.py",
+    "src/parser.py",
+    "src/logger/logger_setup.py",
+    "src/ubuntu_commands/helper_functions.py"
+]
