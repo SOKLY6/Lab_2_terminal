@@ -6,11 +6,11 @@ from logger.logger_setup import terminal_logger
 
 def cat(arguments: list[str], flags: set[typing.Any] | None = None) -> int:
     """Выводит содержимое файлов в терминал.
-    
+
     Args:
         arguments: Список путей к файлам
         flags: Флаги (не поддерживаются)
-    
+
     Returns:
         int: 0 при успехе, 1 при ошибке
     """

@@ -6,11 +6,11 @@ from logger.logger_setup import terminal_logger
 
 def history(argument: list[str], flags: set[typing.Any] | None = None) -> int:
     """Показывает историю команд.
-    
+
     Args:
         argument: Количество последних команд для показа (опционально)
         flags: Флаги (не поддерживаются)
-    
+
     Returns:
         int: 0 при успехе, 1 при ошибке
     """

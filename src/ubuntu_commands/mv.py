@@ -9,11 +9,11 @@ from ubuntu_commands import helper_functions
 
 def mv(arguments: list[str], flags: set[typing.Any] | None = None) -> int:
     """Перемещает или переименовывает файлы и директории.
-    
+
     Args:
         arguments: Исходные пути и путь назначения
         flags: Флаги (не поддерживаются)
-    
+
     Returns:
         int: 0 при успехе, 1 при ошибке
     """

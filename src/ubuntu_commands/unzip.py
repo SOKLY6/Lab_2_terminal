@@ -8,10 +8,10 @@ from ubuntu_commands import helper_functions
 
 def is_zip_archive(file_path: Path) -> bool:
     """Проверяет, является ли файл zip архивом.
-    
+
     Args:
         file_path: Путь к файлу для проверки
-    
+
     Returns:
         bool: True если файл является zip архивом
     """
@@ -21,11 +21,11 @@ def is_zip_archive(file_path: Path) -> bool:
 
 def unzip(arguments: list[str], flags: set[typing.Any] | None = None) -> int:
     """Распаковывает zip-архивы.
-    
+
     Args:
         arguments: Пути к архивам и директория для распаковки (опционально)
         flags: Флаги (не поддерживаются)
-    
+
     Returns:
         int: 0 при успехе, 1 при ошибке
     """

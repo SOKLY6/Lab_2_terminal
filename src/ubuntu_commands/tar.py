@@ -8,11 +8,11 @@ from ubuntu_commands import helper_functions
 
 def tar(arguments: list[str], flags: set[typing.Any] | None = None) -> int:
     """Создает tar-архив из файлов и директорий.
-    
+
     Args:
         arguments: Имя архива и пути к архивируемым файлам
         flags: Флаги (не поддерживаются)
-    
+
     Returns:
         int: 0 при успехе, 1 при ошибке
     """

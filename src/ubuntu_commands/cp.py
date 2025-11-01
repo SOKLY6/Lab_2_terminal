@@ -11,11 +11,11 @@ correct_flags = {'r'}
 
 def cp(arguments: list[str], flags: set[typing.Any] | None = None) -> int:
     """Копирует файлы и директории.
-    
+
     Args:
         arguments: Пути копируемых файлов и директорий
         flags: Поддерживается только флаг 'r' для рекурсивного копирования
-    
+
     Returns:
         int: 0 при успехе, 1 при ошибке
     """

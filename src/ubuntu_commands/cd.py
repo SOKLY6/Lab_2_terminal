@@ -7,11 +7,11 @@ from logger.logger_setup import terminal_logger
 
 def cd(arguments: list[str], flags: set[typing.Any] | None = None) -> int:
     """Меняет текущую рабочую директорию.
-    
+
     Args:
         arguments: Путь к директории (максимум 1 аргумент)
         flags: Флаги (не поддерживаются)
-    
+
     Returns:
         int: 0 при успехе, 1 при ошибке
     """
